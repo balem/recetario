@@ -1,0 +1,37 @@
+<VirtualHost *:80>
+	ServerName test.djangoserver
+	DocumentRoot /var/www/recetario/recetario
+	WSGIScriptAlias / /var/www/recetario/recetario/wsgi.py
+	Alias /static/ /var/www/recetario/recetario/static/
+	Alias /media/ /var/www/recetario/recetario/media/
+	AliasMatch ^/([^/]*\.css) /var/www/recetario/recetario/media/$1
+	
+	<Directory /var/www/recetario/recetario/>
+		<Files wsgi.py>
+			Order deny,allow
+			Allow from all
+		</Files>
+	</Directory>
+
+	<Directory /var/www/recetario/recetario/recetario/static/>
+		AllowOverride None
+		Options Indexes FollowSymLinks Multiviews
+		Order deny,allow
+		Allow from all
+	</Directory>
+
+	<Directory /var/www/recetario/recetario/recetario/carga/>
+		Order deny,allow
+		Allow from all
+	</Directory>
+	Options Indexes FollowSymLinks Includes ExecCGI
+	WSGIDaemonProcess houseofsysadmin user=www-data group=www-data threads=25
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
